@@ -10,7 +10,7 @@ class TabelaLivros(db: SQLiteDatabase) {
 
     fun cria() {
         db.execSQL("CREATE TABLE " + NOME_Tabela+
-                "(" + BaseColumns._ID+
+                "( " + BaseColumns._ID+
                 " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 CAMPO_TITULO+ "TEXT NOT NULL," +
                 CAMPO_AUTOR+ "TEXT NOT NULL," +
@@ -19,6 +19,7 @@ class TabelaLivros(db: SQLiteDatabase) {
                     "REFERENCES " + TabelaCategorias.NOME_Tabela+
                 ")"
         )
+
     }
 
     // CREATE TABLE livros(
@@ -57,5 +58,6 @@ class TabelaLivros(db: SQLiteDatabase) {
         const val CAMPO_TITULO = "titulo"
         const val CAMPO_AUTOR = "autor"
         const val CAMPO_ID_CATEGORIA = "id_categoria"
+
     }
 }
