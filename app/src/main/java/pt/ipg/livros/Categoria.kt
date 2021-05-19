@@ -2,7 +2,7 @@ package pt.ipg.livros
 
 import android.content.ContentValues
 
-data class Categoria (val id: Long = -1, val nome: String) {
+data class Categoria (var id: Long = -1, var nome: String) {
 
     fun toContentValues() : ContentValues{
         val valores = ContentValues()

@@ -1,5 +1,7 @@
 package pt.ipg.livros
 
+import android.database.sqlite.SQLiteDatabase
+import android.provider.BaseColumns
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 
@@ -18,6 +20,16 @@ import org.junit.Before
 class TestBaseDados {
 
     private fun getAppContext() = InstrumentationRegistry.getInstrumentation().targetContext
+    private fun getBdLivrosOpenHelper() = BdLivrosOpenHelper(getAppContext())
+    private fun getTabelaCategorias(db: SQLiteDatabase) = TabelaCategorias(db)
+    private fun getTabelaLivros(db: SQLiteDatabase) = TabelaLivros(db)
+
+    private fun insertCategoria(tabelaCategorias: TabelaCategorias, categoria: Categoria): Long {
+        val id = tabelaCategorias.insert(categoria.toContentValues())
+        assertNotEquals(-1, id)
+
+        return id
+    }
 
     @Before
     fun apagaBaseDados(){
@@ -27,8 +39,7 @@ class TestBaseDados {
     @Test
     fun consegueAbrirBaseDados(){
 
-        val dbOpenHelper = BdLivrosOpenHelper(getAppContext())
-        val db = dbOpenHelper.readableDatabase
+        val db = getBdLivrosOpenHelper().readableDatabase
         assert(db.isOpen)
         db.close()
 
@@ -38,16 +49,35 @@ class TestBaseDados {
 
     fun consegueInserirCategorias(){
 
-        val dbOpenHelper = BdLivrosOpenHelper(getAppContext())
-        val db = dbOpenHelper.writableDatabase
+        val db = getBdLivrosOpenHelper().writableDatabase
 
-        val categoria = Categoria(nome ="Drama")
-        val id = TabelaCategorias(db).insert(categoria.toContentValues())
-
-        assertNotEquals(-1, id)
+        insertCategoria(getTabelaCategorias(db), Categoria(nome ="Drama"))
 
         db.close()
 
     }
+
+    @Test
+
+    fun consegueAlterarCategorias(){
+
+        val db = getBdLivrosOpenHelper().writableDatabase
+
+        val tabelaCategorias = getTabelaCategorias(db)
+        val categoria = Categoria(nome ="Sci")
+        categoria.id = insertCategoria(tabelaCategorias, categoria)
+        categoria.nome = "sci-fi"
+
+        val registosAlterados = tabelaCategorias.update(
+            categoria.toContentValues(),
+            "${BaseColumns._ID}=?",
+            arrayOf(categoria.id.toString())
+        )
+
+        assertEquals(1, registosAlterados)
+    }
+
+
+
 
 }
