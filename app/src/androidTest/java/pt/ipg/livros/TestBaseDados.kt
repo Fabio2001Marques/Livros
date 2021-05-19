@@ -77,7 +77,17 @@ class TestBaseDados {
         assertEquals(1, registosAlterados)
     }
 
+    @Test
 
+    fun consegueApagarCategorias() {
 
+        val db = getBdLivrosOpenHelper().writableDatabase
+        val tabelaCategorias = getTabelaCategorias(db)
+        val categoria = Categoria(nome ="Teste")
+        categoria.id = insertCategoria(tabelaCategorias, categoria)
+
+        val registosApagados = tabelaCategorias.delete("${BaseColumns._ID}=?",arrayOf(categoria.id.toString()))
+        assertEquals(1, registosApagados)
+    }
 
 }
