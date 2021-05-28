@@ -197,7 +197,24 @@ class TestBaseDados {
         db.close()
     }
 
+    @Test
 
+    fun consegueEliminarLivros() {
+
+        val db = getBdLivrosOpenHelper().writableDatabase
+
+        val categoria = Categoria(nome ="Auto ajuda")
+        categoria.id = insertCategoria(getTabelaCategorias(db), categoria)
+
+        val livro = Livro(titulo = "teste", autor = "teste", idCategoria = categoria.id)
+        livro.id = insertLivro((getTabelaLivros(db)), livro)
+
+
+        val registosApagados = getTabelaLivros(db).delete("${BaseColumns._ID}=?",arrayOf(livro.id.toString()))
+        assertEquals(1, registosApagados)
+
+        db.close()
+    }
 
 
 }
