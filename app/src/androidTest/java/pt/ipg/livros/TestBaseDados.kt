@@ -169,5 +169,35 @@ class TestBaseDados {
 
     }
 
+    @Test
+
+    fun consegueAlterarLivros(){
+
+        val db = getBdLivrosOpenHelper().writableDatabase
+
+        val categoria = Categoria(nome ="Mistério")
+        categoria.id = insertCategoria(getTabelaCategorias(db), categoria)
+
+        val livro = Livro(titulo = "?", autor = "?", idCategoria = categoria.id)
+        livro.id = insertLivro((getTabelaLivros(db)), livro)
+
+        livro.titulo = "Ninfeias negras"
+        livro.autor = "Michel Bussi"
+
+        val registosAlterados = getTabelaLivros(db).update(
+            livro.toContentValues(),
+            "${BaseColumns._ID}=?",
+            arrayOf(categoria.id.toString())
+        )
+
+        assertEquals(1, registosAlterados)
+
+        assertEquals(livro, getLivroBd(getTabelaLivros(db), livro.id))
+
+        db.close()
+    }
+
+
+
 
 }
