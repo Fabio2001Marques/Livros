@@ -216,5 +216,22 @@ class TestBaseDados {
         db.close()
     }
 
+    @Test
+
+    fun consegueLerLivros() {
+
+        val db = getBdLivrosOpenHelper().writableDatabase
+
+        val categoria = Categoria(nome ="Culinária")
+        categoria.id = insertCategoria(getTabelaCategorias(db), categoria)
+
+        val livro = Livro(titulo = "Chef profissional", autor = "Instituto Americano de Culinária", idCategoria = categoria.id)
+        livro.id = insertLivro((getTabelaLivros(db)), livro)
+
+        assertEquals(livro, getLivroBd(getTabelaLivros(db), livro.id))
+
+        db.close()
+    }
+
 
 }
