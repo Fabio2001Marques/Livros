@@ -2,6 +2,8 @@ package pt.ipg.livros
 
 import android.content.ContentProvider
 import android.content.ContentValues
+import android.content.IntentFilter
+import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
 
@@ -13,7 +15,6 @@ class ContentProviderLivros : ContentProvider() {
 
         return true
     }
-
 
     override fun query(
         uri: Uri,
@@ -27,7 +28,7 @@ class ContentProviderLivros : ContentProvider() {
 
 
     override fun getType(uri: Uri): String? {
-        TODO("Not yet implemented")
+
     }
 
 
@@ -35,48 +36,11 @@ class ContentProviderLivros : ContentProvider() {
         TODO("Not yet implemented")
     }
 
-    /**
-     * Implement this to handle requests to delete one or more rows. The
-     * implementation should apply the selection clause when performing
-     * deletion, allowing the operation to affect multiple rows in a directory.
-     * As a courtesy, call
-     * [ notifyChange()][ContentResolver.notifyChange] after deleting. This method can be called from multiple
-     * threads, as described in [Processes
- * and Threads](
-      {@docRoot}guide/topics/fundamentals/processes-and-threads.html#Threads).
-     *
-     *
-     * The implementation is responsible for parsing out a row ID at the end of
-     * the URI, if a specific row is being deleted. That is, the client would
-     * pass in `content://contacts/people/22` and the implementation
-     * is responsible for parsing the record number (22) when creating a SQL
-     * statement.
-     *
-     * @param uri The full URI to query, including a row ID (if a specific
-     * record is requested).
-     * @param selection An optional restriction to apply to rows when deleting.
-     * @return The number of rows affected.
-     * @throws SQLException
-     */
+
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int {
         TODO("Not yet implemented")
     }
 
-    /**
-     * Implement this to handle requests to update one or more rows. The
-     * implementation should update all rows matching the selection to set the
-     * columns according to the provided values map. As a courtesy, call
-     * [ notifyChange()][ContentResolver.notifyChange] after updating. This method can be called from multiple
-     * threads, as described in [Processes
- * and Threads](
-      {@docRoot}guide/topics/fundamentals/processes-and-threads.html#Threads).
-     *
-     * @param uri The URI to query. This can potentially have a record ID if
-     * this is an update request for a specific record.
-     * @param values A set of column_name/value pairs to update in the database.
-     * @param selection An optional filter to match rows to update.
-     * @return the number of rows affected.
-     */
     override fun update(
         uri: Uri,
         values: ContentValues?,
@@ -84,5 +48,34 @@ class ContentProviderLivros : ContentProvider() {
         selectionArgs: Array<out String>?
     ): Int {
         TODO("Not yet implemented")
+    }
+    companion object{
+
+        const val AUTHORITY = "pt.ipg.livros"
+        const val LIVROS = "livros"
+        const val CATEGORIAS = "categorias"
+
+        private const val URI_LIVROS = 100
+        private const val URI_LIVRO_ESPECIFICO = 101
+        private const val URI_CATEGORIAS = 200
+        private const val URI_CATEGORIA_ESPECIFICA = 201
+
+        private const val MULTIPLOS_ITEMS = "vnd.adroid.cursor.dir"
+        private const val UNICO_ITEM = "vnd.android.cursor.item"
+
+        private fun getUriMatcher() : UriMatcher{
+            val uriMatcher = UriMatcher(UriMatcher.NO_MATCH)
+
+            // content://pt.ipg.livros/livros
+            // content://pt.ipg.livros/categorias
+            // content://pt.ipg.livros/livros/5
+
+            uriMatcher.addURI(AUTHORITY, LIVROS, URI_LIVROS)
+            uriMatcher.addURI(AUTHORITY,"$LIVROS/#", URI_LIVRO_ESPECIFICO)
+            uriMatcher.addURI(AUTHORITY, CATEGORIAS, URI_CATEGORIAS)
+            uriMatcher.addURI(AUTHORITY, "$CATEGORIAS/#", URI_CATEGORIA_ESPECIFICA)
+
+            return uriMatcher
+        }
     }
 }
