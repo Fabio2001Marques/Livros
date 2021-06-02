@@ -91,7 +91,25 @@ class ContentProviderLivros : ContentProvider() {
         selection: String?,
         selectionArgs: Array<out String>?
     ): Int {
-        TODO("Not yet implemented")
+        val bd = bdLivrosOpenHelper!!.writableDatabase
+
+        return when (getUriMatcher().match(uri)){
+            URI_LIVROS -> 0
+
+            URI_LIVRO_ESPECIFICO -> TabelaLivros(bd).update(
+                values!!,
+                "${BaseColumns._ID}=?",
+                arrayOf(uri.lastPathSegment!!)
+                )
+
+            URI_CATEGORIAS -> 0
+            URI_CATEGORIA_ESPECIFICA -> TabelaCategorias(bd).update(
+                values!!,
+                "${BaseColumns._ID}=?",
+                arrayOf(uri.lastPathSegment!!)
+            )
+            else -> 0
+        }
     }
     companion object{
 
