@@ -28,7 +28,13 @@ class ContentProviderLivros : ContentProvider() {
 
 
     override fun getType(uri: Uri): String? {
-
+        return when (getUriMatcher().match(uri)){
+                        URI_LIVROS -> "$MULTIPLOS_ITEMS/$LIVROS"
+                        URI_LIVRO_ESPECIFICO -> "$UNICO_ITEM/$LIVROS"
+                        URI_CATEGORIAS -> "$MULTIPLOS_ITEMS/$CATEGORIAS"
+                        URI_CATEGORIA_ESPECIFICA -> "$UNICO_ITEM/$CATEGORIAS"
+            else -> null
+                    }
     }
 
 
