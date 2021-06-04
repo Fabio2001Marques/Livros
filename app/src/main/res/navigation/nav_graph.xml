@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="pt.ipg.livros.FirstFragment"
+        android:name="pt.ipg.livros.ListaLivrosFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        tools:layout="@layout/fragment_ListaLivros">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
